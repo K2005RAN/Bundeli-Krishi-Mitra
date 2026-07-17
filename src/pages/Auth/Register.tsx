@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../components/ui/Toast';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
-import { User, Phone, MapPin, Check } from 'lucide-react';
+import { User, Phone, MapPin, Check, KeyRound } from 'lucide-react';
 
 export const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -13,6 +13,7 @@ export const Register: React.FC = () => {
 
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
   const [district, setDistrict] = useState('झाँसी');
   const [selectedCrops, setSelectedCrops] = useState<string[]>(['गेहूं']);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +39,10 @@ export const Register: React.FC = () => {
       toast('कृपया १० अंकों का सही मोबाइल नंबर दर्ज करें।', 'warning');
       return;
     }
+    if (!password || password.length < 6) {
+      toast('कृपया कम से कम 6 अक्षरों का मजबूत पासवर्ड दर्ज करें।', 'warning');
+      return;
+    }
     if (selectedCrops.length === 0) {
       toast('कृपया कम से कम एक मुख्य फसल का चयन करें।', 'warning');
       return;
@@ -45,7 +50,7 @@ export const Register: React.FC = () => {
 
     setIsLoading(true);
     try {
-      await register(name, phone, district, selectedCrops);
+      await register(name, phone, district, selectedCrops, password);
       toast('पंजीकरण सफल! बुंदेली कृषि मित्र ऐप में आपका स्वागत है।', 'success');
       navigate('/dashboard');
     } catch (err: any) {
@@ -99,6 +104,24 @@ export const Register: React.FC = () => {
                 placeholder="अपना 10 अंकों का मोबाइल नंबर डालें"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                className="w-full bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-xl py-3 pl-11 pr-4 text-slate-800 dark:text-slate-100 font-medium focus:outline-none focus:border-primary"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Password */}
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+              पासवर्ड बनाएं (Create Password)
+            </label>
+            <div className="relative">
+              <KeyRound className="absolute left-3 top-3.5 h-5 w-5 text-slate-400" />
+              <input
+                type="password"
+                placeholder="कम से कम 6 अक्षरों का पासवर्ड"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-xl py-3 pl-11 pr-4 text-slate-800 dark:text-slate-100 font-medium focus:outline-none focus:border-primary"
                 required
               />

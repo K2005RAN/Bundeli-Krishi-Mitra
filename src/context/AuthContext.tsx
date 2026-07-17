@@ -6,8 +6,8 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   theme: 'light' | 'dark';
-  login: (phone: string, role: 'farmer' | 'admin') => Promise<User>;
-  register: (name: string, phone: string, district: string, crops: string[]) => Promise<User>;
+  login: (phone: string, password?: string) => Promise<User>;
+  register: (name: string, phone: string, district: string, crops: string[], password?: string) => Promise<User>;
   logout: () => void;
   updateUser: (updatedUser: User) => Promise<User>;
   toggleTheme: () => void;
@@ -57,10 +57,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     applyTheme(nextTheme);
   };
 
-  const login = async (phone: string, role: 'farmer' | 'admin') => {
+  const login = async (phone: string, password?: string) => {
     setLoading(true);
     try {
-      const loggedUser = await mockApi.login(phone, role);
+      const loggedUser = await mockApi.login(phone, password);
       setUser(loggedUser);
       return loggedUser;
     } finally {
@@ -68,10 +68,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const register = async (name: string, phone: string, district: string, crops: string[]) => {
+  const register = async (name: string, phone: string, district: string, crops: string[], password?: string) => {
     setLoading(true);
     try {
-      const registeredUser = await mockApi.register(name, phone, district, crops);
+      const registeredUser = await mockApi.register(name, phone, district, crops, password);
       setUser(registeredUser);
       return registeredUser;
     } finally {

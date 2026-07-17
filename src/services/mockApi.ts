@@ -28,9 +28,9 @@ const api = axios.create({
 // database service adapters
 export const mockApi = {
   // --- AUTH SERVICES ---
-  login: async (phone: string, role: 'farmer' | 'admin' = 'farmer'): Promise<User> => {
+  login: async (phone: string, password?: string): Promise<User> => {
     try {
-      const res = await api.post<User>('/auth/login', { phone, role });
+      const res = await api.post<User>('/auth/login', { phone, password });
       const user = { ...res.data, id: (res.data as any)._id || res.data.id };
       localStorage.setItem('km_current_user', JSON.stringify(user));
       return user;
@@ -42,9 +42,9 @@ export const mockApi = {
     }
   },
 
-  register: async (name: string, phone: string, district: string, crops: string[]): Promise<User> => {
+  register: async (name: string, phone: string, district: string, crops: string[], password?: string): Promise<User> => {
     try {
-      const res = await api.post<User>('/auth/register', { name, phone, district, preferredCrops: crops });
+      const res = await api.post<User>('/auth/register', { name, phone, password, district, preferredCrops: crops });
       const user = { ...res.data, id: (res.data as any)._id || res.data.id };
       localStorage.setItem('km_current_user', JSON.stringify(user));
       return user;

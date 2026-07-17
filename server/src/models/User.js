@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   phone: { type: String, required: true, unique: true },
+  password: { type: String }, // Made optional so old mock users don't break the DB
   district: { type: String, required: true },
   language: { type: String, enum: ['Bundeli', 'Hindi', 'English'], default: 'Bundeli' },
   preferredCrops: [{ type: String }],

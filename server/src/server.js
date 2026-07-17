@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { connectDB } from './db.js';
+import bcrypt from 'bcryptjs';
 
 // Mongoose Models
 import { User } from './models/User.js';
@@ -177,19 +178,34 @@ connectDB().then(() => {
 
 app.post('/api/auth/login', async (req, res) => {
   try {
-    const { phone, role } = req.body;
-    let dbUser = await User.findOne({ phone, role });
+    const { phone, password } = req.body;
+    
+    // Find user by phone only, regardless of role since admin is removed
+    let dbUser = await User.findOne({ phone });
     
     if (!dbUser) {
-      dbUser = new User({
-        name: role === 'admin' ? 'डॉ. रविंद्र अहिरवार' : 'नया किसान भाई',
-        phone,
-        district: 'झाँसी',
-        language: role === 'admin' ? 'Hindi' : 'Bundeli',
-        preferredCrops: role === 'admin' ? [] : ['गेहूं'],
-        role
-      });
-      await dbUser.save();
+      return res.status(401).json({ error: 'यह मोबाइल नंबर पंजीकृत नहीं है। (Phone not registered)' });
+    }
+    
+    // Fallback for old mock users who might have plain-text passwords or no passwords
+    let isMatch = false;
+    if (dbUser.password) {
+      // If the password doesn't start with bcrypt's $2a$ or $2b$, it's likely plain-text from the previous step
+      if (dbUser.password.startsWith('$2a$') || dbUser.password.startsWith('$2b$')) {
+        isMatch = await bcrypt.compare(password, dbUser.password);
+      } else {
+        isMatch = (password === dbUser.password);
+      }
+    }
+    
+    if (!isMatch) {
+      return res.status(401).json({ error: 'पासवर्ड गलत है। (Incorrect password)' });
+    }
+    
+    // Convert to regular user if they were an admin, or just keep it
+    if (dbUser.role === 'admin') {
+       dbUser.role = 'farmer';
+       await dbUser.save();
     }
     
     res.json(dbUser);
@@ -200,15 +216,19 @@ app.post('/api/auth/login', async (req, res) => {
 
 app.post('/api/auth/register', async (req, res) => {
   try {
-    const { name, phone, district, preferredCrops } = req.body;
+    const { name, phone, password, district, preferredCrops } = req.body;
     const existing = await User.findOne({ phone });
     if (existing) {
       return res.status(400).json({ error: 'यह मोबाइल नंबर पहले से पंजीकृत है!' });
     }
     
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    
     const newUser = new User({
       name,
       phone,
+      password: hashedPassword,
       district,
       preferredCrops,
       language: 'Bundeli',
