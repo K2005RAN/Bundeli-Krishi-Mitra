@@ -1,0 +1,210 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;650;700;800&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #10b981; /* Emerald 500 */
+  --color-primary-hover: #059669; /* Emerald 600 */
+  --color-primary-dark: #065f46; /* Emerald 800 */
+  --color-secondary: #34d399; /* Emerald 400 */
+  --color-accent: #f59e0b; /* Amber 500 */
+  --color-accent-hover: #d97706; /* Amber 600 */
+  --color-background-light: #f8fafc; /* Slate 50 */
+  --color-card-light: #ffffff;
+  
+  --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', sans-serif;
+  
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+}
+
+/* Base Body Styles */
+body {
+  font-family: var(--font-sans);
+  background-color: #030712; /* Slate 950 - Modern Dark by default */
+  color: #f3f4f6; /* Gray 100 */
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+}
+
+body.light-mode-active {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.15);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.3);
+}
+
+/* Modern Glowing Gradients & Mesh backgrounds */
+.bg-gradient-mesh {
+  background-color: #030712;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.07) 0px, transparent 50%),
+    radial-gradient(at 50% 0%, rgba(245, 158, 11, 0.04) 0px, transparent 40%),
+    radial-gradient(at 100% 0%, rgba(6, 95, 70, 0.08) 0px, transparent 55%);
+}
+
+body.light-mode-active .bg-gradient-mesh {
+  background-color: #f8fafc;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+    radial-gradient(at 50% 0%, rgba(245, 158, 11, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.06) 0px, transparent 50%);
+}
+
+/* Glowing Glassmorphism Cards (Linear/Vercel style) */
+.glass-card {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  border-color: rgba(16, 185, 129, 0.25);
+  box-shadow: 0 12px 40px 0 rgba(16, 185, 129, 0.05);
+}
+
+body.light-mode-active .glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(16, 185, 129, 0.12);
+  box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.02);
+}
+
+body.light-mode-active .glass-card:hover {
+  border-color: rgba(16, 185, 129, 0.35);
+  box-shadow: 0 12px 35px 0 rgba(16, 185, 129, 0.08);
+}
+
+/* Glow Border Buttons */
+.btn-glow-border {
+  position: relative;
+  border-radius: 12px;
+}
+.btn-glow-border::before {
+  content: '';
+  position: absolute;
+  inset: -1.5px;
+  background: linear-gradient(90deg, #10b981, #34d399, #f59e0b);
+  border-radius: 13px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.btn-glow-border:hover::before {
+  opacity: 1;
+}
+
+/* Hover Lift scale transition */
+.hover-lift {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-5px) scale(1.01);
+}
+
+/* Voice Animation Waveforms */
+@keyframes modern-wave {
+  0%, 100% { height: 10%; }
+  50% { height: 100%; }
+}
+
+.voice-bar {
+  animation: modern-wave 1.2s ease-in-out infinite;
+}
+
+/* Custom styling overrides for pristine form inputs */
+input, select, textarea {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15) !important;
+}
+
+/* Print Overrides */
+@media print {
+  /* Force clean white print background on html/body and the root app wrapper */
+  html, body, #root {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
+    color: #0f172a !important;
+  }
+
+  /* Force parent containers to have transparent background fills */
+  div, main, section, article {
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Force colors and background gradients to print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-scheme: light !important;
+  }
+  
+  /* Hide the entire page elements (sidebar, layout, left input controls, header, buttons) */
+  body * {
+    visibility: hidden;
+  }
+  
+  /* Make only the report printable container visible and scale it to full width */
+  #disease-report-print, #disease-report-print * {
+    visibility: visible;
+  }
+  
+  @page {
+    size: A4 portrait;
+    margin: 8mm !important;
+  }
+
+  #disease-report-print {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 96vh !important; /* Force fit single page */
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 4px solid #10b981 !important; /* solid colored 4 side border */
+    border-radius: 20px !important;
+    box-shadow: none !important;
+    padding: 24px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Custom Print Watermark Styling */
+  .print-watermark {
+    display: flex !important;
+    opacity: 0.04 !important;
+    transform: rotate(-30deg) !important;
+  }
+  
+  /* Hide standard action buttons in printing */
+  .no-print {
+    display: none !important;
+  }
+}
