@@ -11,6 +11,8 @@
     <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=FastAPI&logoColor=white" alt="FastAPI">
     <img src="https://img.shields.io/badge/Gemini_AI-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Gemini">
   </p>
+
+  ### 🚀 [Live Demo (Click Here)](https://bundeli-krishi-mitra.vercel.app/)
 </div>
 
 ---
