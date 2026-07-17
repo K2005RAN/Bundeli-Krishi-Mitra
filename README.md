@@ -1,6 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/K2005RAN/Bundeli-Krishi-Mitra/main/public/logo.png" alt="Bundeli Krishi Mitra Logo" width="150" height="150" style="border-radius: 50%;">
-  
+
   # 🌱 Bundeli Krishi Mitra (बुंदेली कृषि मित्र)
   
   **आपका अपना डिजिटल खेती सलाहकार**
