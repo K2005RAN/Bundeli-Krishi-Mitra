@@ -112,10 +112,10 @@ python main.py
 
 ## 📜 License
 
-This project is open-source and available under the [MIT License](LICENSE).
+This project is open-source.
 
 ---
 
 <div align="center">
-  <i>Made with ❤️ for the farmers of India.</i>
+  <i>Made with ❤️ for the farmers of Bundelkhand.</i>
 </div>
