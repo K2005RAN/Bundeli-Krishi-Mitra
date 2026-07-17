@@ -14,7 +14,10 @@ import {
   ArrowUpDown,
   CircleDollarSign,
   Locate,
-  LineChart as LineIcon
+  LineChart as LineIcon,
+  ChevronDown,
+  Leaf,
+  MapPin
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -38,8 +41,24 @@ export const Mandi: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'all' | 'favorites'>('all');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-  const districts = ['झाँसी', 'टीकमगढ़', 'सागर', 'छतरपुर', 'ललितपुर'];
-  const cropTypes = ['गेहूं', 'चना', 'सोयाबीन', 'सरसों', 'टमाटर'];
+  const [isMandiDropdownOpen, setIsMandiDropdownOpen] = useState(false);
+  const [isCropDropdownOpen, setIsCropDropdownOpen] = useState(false);
+  const [selectedMandi, setSelectedMandi] = useState<string>('');
+
+  const currentDistrict = user?.district || 'दमोह';
+  
+  // Only show crop varieties that are actually available in the selected mandi
+  const uniqueCrops = Array.from(new Set(
+    pricesList
+      .filter(p => p.district === currentDistrict && (!selectedMandi || p.mandiName === selectedMandi))
+      .map(p => p.cropName)
+  ));
+
+  const availableMandis = Array.from(new Set(
+    pricesList
+      .filter(p => p.district === currentDistrict)
+      .map(p => p.mandiName)
+  ));
 
   useEffect(() => {
     const loadPrices = async () => {
@@ -47,8 +66,16 @@ export const Mandi: React.FC = () => {
       setPricesList(data);
       setFavorites(mockApi.getFavoriteCrops());
       if (data.length > 0) {
-        setSelectedCrop(data[0].cropName);
-        setSelectedDistrict(data[0].district);
+        // Find mandis in user's district
+        const mandisInDistrict = data.filter(p => p.district === currentDistrict);
+        
+        if (mandisInDistrict.length > 0) {
+          setSelectedCrop(mandisInDistrict[0].cropName);
+          setSelectedMandi(mandisInDistrict[0].mandiName);
+        } else {
+          setSelectedCrop(data[0].cropName);
+          setSelectedMandi(data[0].mandiName);
+        }
       }
     };
     loadPrices();
@@ -69,7 +96,7 @@ export const Mandi: React.FC = () => {
   const filteredList = pricesList.filter((item) => {
     const matchesSearch = item.cropName.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           item.mandiName.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesDistrict = selectedDistrict ? item.district === selectedDistrict : true;
+    const matchesDistrict = item.district === currentDistrict;
     const matchesTab = activeTab === 'favorites' ? favorites.includes(item.cropName) : true;
 
     return matchesSearch && matchesDistrict && matchesTab;
@@ -78,8 +105,9 @@ export const Mandi: React.FC = () => {
   });
 
   // Selected crop details for chart
-  const activeCropDetails = pricesList.find(p => p.cropName === selectedCrop && p.district === selectedDistrict) || 
-                             pricesList.find(p => p.cropName === selectedCrop) || 
+  const activeCropDetails = pricesList.find(p => p.cropName === selectedCrop && p.district === currentDistrict && p.mandiName === selectedMandi) || 
+                             pricesList.find(p => p.cropName === selectedCrop && p.district === currentDistrict) ||
+                             pricesList.find(p => p.cropName === selectedCrop) ||
                              pricesList[0];
 
   return (
@@ -117,19 +145,73 @@ export const Mandi: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Dropdowns */}
-                <div className="flex gap-2">
-                  <select
-                    value={selectedCrop}
-                    onChange={(e) => setSelectedCrop(e.target.value)}
-                    className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 focus:outline-none"
-                  >
-                    {cropTypes.map(c => (
-                      <option key={c} value={pricesList.find(p => p.cropName.startsWith(c))?.cropName || c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
+                {/* Modern Custom Dropdowns */}
+                <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mt-4 sm:mt-0 relative z-40">
+                  {/* Mandi Selector */}
+                  <div className="relative">
+                    <div 
+                      className="flex items-center justify-between gap-2 px-3.5 py-2.5 bg-primary/10 text-primary hover:bg-primary/15 border border-primary/20 rounded-xl text-xs font-extrabold cursor-pointer transition-colors w-full sm:w-auto min-w-[140px]" 
+                      onClick={() => { setIsMandiDropdownOpen(!isMandiDropdownOpen); setIsCropDropdownOpen(false); }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4" />
+                        <span className="truncate max-w-[100px]">{selectedMandi || 'मंडी चुनें'}</span>
+                      </div>
+                      <ChevronDown className={`h-3.5 w-3.5 transition-transform ${isMandiDropdownOpen ? 'rotate-180' : ''}`} />
+                    </div>
+                    {isMandiDropdownOpen && (
+                      <div className="absolute top-full left-0 sm:left-auto mt-2 w-48 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-xl p-2 z-50 max-h-72 overflow-y-auto custom-scrollbar animate-in fade-in zoom-in-95 duration-100">
+                        <p className="px-3 py-2 text-[9px] font-bold text-slate-400 uppercase tracking-wider sticky top-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm z-10">{currentDistrict} की मंडियां</p>
+                        {availableMandis.length === 0 && <p className="px-3 py-3 text-xs font-semibold text-slate-400 text-center">कोई मंडी उपलब्ध नहीं</p>}
+                        {availableMandis.map(m => (
+                          <button 
+                            key={m} 
+                            onClick={() => { 
+                              setSelectedMandi(m); 
+                              setIsMandiDropdownOpen(false);
+                              // Auto-switch crop if needed
+                              const cropsInMandi = pricesList.filter(p => p.mandiName === m).map(p => p.cropName);
+                              if (cropsInMandi.length > 0 && !cropsInMandi.includes(selectedCrop)) {
+                                setSelectedCrop(cropsInMandi[0]);
+                              }
+                            }} 
+                            className={`w-full text-left px-3 py-2.5 rounded-lg text-xs font-semibold transition-colors mb-0.5 ${selectedMandi === m ? 'bg-primary text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                          >
+                            {m}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Crop Variety Selector */}
+                  <div className="relative">
+                    <div 
+                      className="flex items-center justify-between gap-2 px-3.5 py-2.5 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-650 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 border border-emerald-200/60 dark:border-emerald-800/50 rounded-xl text-xs font-extrabold cursor-pointer transition-colors w-full sm:w-auto min-w-[150px]" 
+                      onClick={() => { setIsCropDropdownOpen(!isCropDropdownOpen); }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Leaf className="h-4 w-4" />
+                        <span className="truncate max-w-[120px]">{selectedCrop || 'फसल चुनें'}</span>
+                      </div>
+                      <ChevronDown className={`h-3.5 w-3.5 transition-transform ${isCropDropdownOpen ? 'rotate-180' : ''}`} />
+                    </div>
+                    {isCropDropdownOpen && (
+                      <div className="absolute top-full right-0 sm:right-0 sm:left-auto mt-2 w-56 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-[0_8px_30px_rgb(0,0,0,0.12)] rounded-xl p-2 z-50 max-h-72 overflow-y-auto custom-scrollbar animate-in fade-in zoom-in-95 duration-100">
+                        <p className="px-3 py-2 text-[9px] font-bold text-slate-400 uppercase tracking-wider sticky top-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm z-10">उपलब्ध फसलें व किस्में (Varieties)</p>
+                        {uniqueCrops.length === 0 && <p className="px-3 py-3 text-xs font-semibold text-slate-400 text-center">कोई फसल उपलब्ध नहीं</p>}
+                        {uniqueCrops.map(c => (
+                          <button 
+                            key={c} 
+                            onClick={() => { setSelectedCrop(c); setIsCropDropdownOpen(false); }} 
+                            className={`w-full text-left px-3 py-2.5 rounded-lg text-xs font-semibold transition-colors mb-0.5 ${selectedCrop === c ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'}`}
+                          >
+                            {c}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </CardHeader>
 

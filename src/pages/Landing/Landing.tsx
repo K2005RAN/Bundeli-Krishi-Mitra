@@ -295,9 +295,17 @@ export const Landing: React.FC = () => {
 
       {/* Footer */}
       <footer className="border-t border-slate-800/80 py-8 bg-slate-950/60 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500 font-semibold">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-slate-400 font-semibold">
           <p>© २०२६ बुंदेली कृषि मित्र। सर्वाधिकार सुरक्षित।</p>
-          <p>विकासकर्ता: कृषि वैज्ञानिक और किसान कल्याण टीम</p>
+          <div className="flex flex-col md:flex-row items-center gap-1.5 md:gap-4 text-center md:text-left">
+            <span>विकासकर्ता: करन राय</span>
+            <span className="hidden md:inline text-slate-700">•</span>
+            <span>मोबाइल: 9301887727</span>
+            <span className="hidden md:inline text-slate-700">•</span>
+            <span>स्थान: दमोह, मध्य प्रदेश</span>
+            <span className="hidden md:inline text-slate-700">•</span>
+            <span>ईमेल: raik182005@gamil.com</span>
+          </div>
         </div>
       </footer>
     </div>

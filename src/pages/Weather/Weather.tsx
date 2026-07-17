@@ -23,7 +23,10 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
-  Legend
+  Legend,
+  PieChart,
+  Pie,
+  Cell
 } from 'recharts';
 
 export const Weather: React.FC = () => {
@@ -31,7 +34,6 @@ export const Weather: React.FC = () => {
 
   const [current, setCurrent] = useState<WeatherCondition | null>(null);
   const [forecast, setForecast] = useState<ForecastDay[]>([]);
-  const [alerts, setAlerts] = useState<WeatherAlert[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,10 +46,6 @@ export const Weather: React.FC = () => {
         const data = await mockApi.getWeatherCondition(district);
         setCurrent(data.current);
         setForecast(data.forecast);
-
-        // Load alerts
-        const allAlerts = await mockApi.getWeatherAlerts();
-        setAlerts(allAlerts);
       } catch (e) {
         console.error(e);
       } finally {
@@ -88,6 +86,11 @@ export const Weather: React.FC = () => {
   };
 
   const advisories = getAdvisories();
+  
+  const pieData = [
+    { name: 'वर्षा की संभावना (Rain)', value: current?.rainProb || 0, color: '#3b82f6' },
+    { name: 'सूखा मौसम (Dry)', value: 100 - (current?.rainProb || 0), color: '#e2e8f0' }
+  ];
 
   return (
     <div className="space-y-6 text-left pb-12">
@@ -148,76 +151,91 @@ export const Weather: React.FC = () => {
             </div>
           </Card>
 
-          {/* Action advisories box */}
-          {advisories.length > 0 && (
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-bold text-slate-500 flex items-center gap-1.5">
-                  <BadgeAlert className="h-4 w-4 text-primary" />
-                  विशेषज्ञ कृषि सलाह
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {advisories.map((ad, idx) => (
-                  <div
-                    key={idx}
-                    className={`p-3 rounded-xl border text-xs leading-relaxed ${
-                      ad.type === 'danger'
-                        ? 'bg-red-50 dark:bg-red-950/20 border-red-100 dark:border-red-900/30 text-red-800 dark:text-red-300'
-                        : 'bg-amber-50 dark:bg-amber-950/20 border-amber-100 dark:border-amber-900/30 text-amber-800 dark:text-amber-300'
-                    }`}
-                  >
-                    <p className="font-bold mb-1">💡 {ad.type === 'danger' ? 'अति महत्वपूर्ण' : 'चेतावनी'}</p>
-                    <p>{user?.language === 'English' ? ad.text : ad.textBundeli}</p>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          )}
+          {/* We moved advisories to the main Active Alerts section on the right */}
         </div>
 
         {/* Right Column: Alerts & Chart & 7-Day Forecast */}
         <div className="lg:col-span-8 space-y-6">
-          {/* Active Alerts List */}
+          {/* Active Alerts List (Real Data Driven) */}
           <div className="space-y-3">
             <h3 className="text-base font-bold text-slate-800 dark:text-white flex items-center gap-1.5">
               <AlertTriangle className="h-5 w-5 text-red-500" />
               सक्रिय चेतावनी (Active Alerts)
             </h3>
-            {alerts.filter(a => a.active).map((alert) => (
+            {advisories.length === 0 && (
+              <Alert variant="info" title="🟢 सामान्य मौसम" className="shadow-sm font-semibold">
+                वर्तमान में कोई गंभीर मौसम चेतावनी नहीं है। कृषि कार्य सामान्य रूप से जारी रख सकते हैं।
+              </Alert>
+            )}
+            {advisories.map((alert, idx) => (
               <Alert
-                key={alert.id}
-                variant={alert.type === 'danger' ? 'danger' : alert.type === 'warning' ? 'warning' : 'info'}
-                title={alert.type === 'danger' ? '🔴 गंभीर मौसम अलर्ट' : alert.type === 'warning' ? '🟡 सामान्य चेतावनी' : '🟢 सामान्य कृषि सूचना'}
+                key={idx}
+                variant={alert.type === 'danger' ? 'danger' : 'warning'}
+                title={alert.type === 'danger' ? '🔴 गंभीर मौसम अलर्ट' : '🟡 मौसम चेतावनी'}
                 className="shadow-sm font-semibold"
               >
-                {user?.language === 'English' ? alert.message : alert.messageBundeli}
+                {user?.language === 'English' ? alert.text : alert.textBundeli}
               </Alert>
             ))}
           </div>
 
-          {/* Forecast Trend chart */}
-          <Card>
-            <CardHeader className="pb-4">
-              <CardTitle className="text-sm font-bold text-slate-500">साप्ताहिक तापमान एवं वर्षा की संभावना का विश्लेषण</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-64 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={forecast.map(f => ({ name: f.day, 'अधिकतम (°C)': f.tempMax, 'न्यूनतम (°C)': f.tempMin, 'वर्षा %': f.rainProb }))}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={0.3} />
-                    <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                    <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} />
-                    <Tooltip contentStyle={{ borderRadius: '12px' }} />
-                    <Legend verticalAlign="top" height={36} iconType="circle" />
-                    <Line type="monotone" dataKey="अधिकतम (°C)" stroke="#FFC107" strokeWidth={3} dot={{ r: 4 }} />
-                    <Line type="monotone" dataKey="न्यूनतम (°C)" stroke="#3b82f6" strokeWidth={2} dot={{ r: 3 }} />
-                    <Line type="monotone" dataKey="वर्षा %" stroke="#2E7D32" strokeWidth={2} strokeDasharray="4 4" dot={{ r: 3 }} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Forecast Trend chart */}
+            <Card className="lg:col-span-2">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-sm font-bold text-slate-500">साप्ताहिक तापमान एवं वर्षा की संभावना का विश्लेषण</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-64 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={forecast.map(f => ({ name: f.day, 'अधिकतम (°C)': f.tempMax, 'न्यूनतम (°C)': f.tempMin, 'वर्षा %': f.rainProb }))}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" opacity={0.3} />
+                      <XAxis dataKey="name" stroke="#94a3b8" fontSize={11} tickLine={false} />
+                      <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} />
+                      <Tooltip contentStyle={{ borderRadius: '12px' }} />
+                      <Legend verticalAlign="top" height={36} iconType="circle" />
+                      <Line type="monotone" dataKey="अधिकतम (°C)" stroke="#FFC107" strokeWidth={3} dot={{ r: 4 }} />
+                      <Line type="monotone" dataKey="न्यूनतम (°C)" stroke="#3b82f6" strokeWidth={2} dot={{ r: 3 }} />
+                      <Line type="monotone" dataKey="वर्षा %" stroke="#2E7D32" strokeWidth={2} strokeDasharray="4 4" dot={{ r: 3 }} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Precipitation Pie Chart */}
+            <Card className="lg:col-span-1">
+              <CardHeader className="pb-0 text-center">
+                <CardTitle className="text-sm font-bold text-slate-500">आज वर्षा की संभावना</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-col items-center justify-center pt-2">
+                <div className="h-48 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={80}
+                        paddingAngle={5}
+                        dataKey="value"
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip formatter={(value) => `${value}%`} contentStyle={{ borderRadius: '8px', padding: '4px 8px' }} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="text-center mt-2">
+                  <p className="text-3xl font-display font-extrabold text-blue-600">{current?.rainProb || 0}%</p>
+                  <p className="text-xs font-semibold text-slate-400">बारिश होने के आसार</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
           {/* 7-Day Grid Cards */}
           <div className="space-y-3">

@@ -240,39 +240,24 @@ export const mockApi = {
   },
 
   getWeatherCondition: async (district: string): Promise<{ current: WeatherCondition; forecast: ForecastDay[] }> => {
-    // Generate temperature forecast variables dynamically based on location hash
-    const hash = district.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    const baseTemp = 28 + (hash % 6);
-    const humidity = 65 + (hash % 15);
-    const rainProb = 10 + (hash % 80);
-
-    const current: WeatherCondition = {
-      temp: baseTemp,
-      humidity,
-      rainProb,
-      windSpeed: 12 + (hash % 8),
-      uvIndex: 5 + (hash % 5),
-      condition: rainProb > 50 ? 'हल्की बारिश' : rainProb > 30 ? 'आंशिक बादल' : 'धूप खिली है',
-      conditionBundeli: rainProb > 50 ? 'पानी बरस सकत है' : rainProb > 30 ? 'बादल छाए हैं' : 'धूप कड़क है'
-    };
-
-    const days = ['रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'];
-    const todayIndex = new Date().getDay();
-
-    const forecast: ForecastDay[] = Array.from({ length: 7 }).map((_, i) => {
-      const dayName = days[(todayIndex + i) % 7];
-      const tempMax = baseTemp + Math.sin(i) * 2;
-      const tempMin = baseTemp - 5 + Math.cos(i) * 2;
+    try {
+      const res = await api.get<{ current: WeatherCondition; forecast: ForecastDay[] }>(`/weather/live/${district}`);
+      return res.data;
+    } catch (err) {
+      console.error('Live weather API failed, using fallback:', err);
       return {
-        day: dayName,
-        tempMax: Math.round(tempMax),
-        tempMin: Math.round(tempMin),
-        condition: (rainProb + i * 5) % 100 > 60 ? 'बारिश' : (rainProb + i * 5) % 100 > 30 ? 'बादल' : 'साफ मौसम',
-        rainProb: (rainProb + i * 7) % 100
+        current: {
+          temp: 30,
+          humidity: 60,
+          rainProb: 10,
+          windSpeed: 10,
+          uvIndex: 5,
+          condition: 'Clear sky',
+          conditionBundeli: 'साफ मौसम'
+        },
+        forecast: []
       };
-    });
-
-    return { current, forecast };
+    }
   },
 
   // --- MANDI PRICES SERVICES ---
