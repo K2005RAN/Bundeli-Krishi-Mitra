@@ -55,7 +55,7 @@ export const Landing: React.FC = () => {
   ];
 
   const stats = [
-    { value: '51', label: 'सक्रिय किसान भाई', icon: Users },
+    { value: '५१+', label: 'सक्रिय किसान भाई', icon: Users },
     { value: '९५%', label: 'रोग पहचान सटीकता', icon: CheckCircle },
     { value: '२४x७', label: 'ए.आई. वैज्ञानिक सलाह', icon: TrendingUp },
     { value: '५०+', label: 'फसलें और सब्ज़ियां', icon: Award }
