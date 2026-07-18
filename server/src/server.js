@@ -222,7 +222,8 @@ app.post('/api/auth/register', async (req, res) => {
       return res.status(400).json({ error: 'यह मोबाइल नंबर पहले से पंजीकृत है!' });
     }
     
-    const salt = await bcrypt.genSalt(10);
+    // Reduced salt rounds from 10 to 6 to improve speed on free-tier cloud instances
+    const salt = await bcrypt.genSalt(6);
     const hashedPassword = await bcrypt.hash(password, salt);
     
     const newUser = new User({
