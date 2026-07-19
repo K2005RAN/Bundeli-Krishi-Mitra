@@ -2,6 +2,8 @@
 /* CACHE BUSTER FOR DARK THEME RESTORE */
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-primary: #10b981; /* Emerald 500 */
   --color-primary-hover: #059669; /* Emerald 600 */
