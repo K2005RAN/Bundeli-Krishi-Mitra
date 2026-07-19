@@ -73,7 +73,17 @@ export const Weather: React.FC = () => {
           const data = await mockApi.getWeatherByCoordinates(latitude, longitude);
           setCurrent(data.current);
           setForecast(data.forecast);
-          setLocationName(data.locationName || 'मेरी लोकेशन');
+          
+          // Client-side Reverse Geocoding to bypass Render server IP rate limits
+          try {
+            const geoRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=hi`);
+            const geoData = await geoRes.json();
+            const actualName = geoData.locality || geoData.city || data.locationName || 'मेरी लोकेशन';
+            setLocationName(actualName);
+          } catch (geoErr) {
+            console.error('Client geocode failed:', geoErr);
+            setLocationName(data.locationName || 'मेरी लोकेशन');
+          }
         } catch (error) {
           console.error(error);
           alert('Failed to fetch weather for your location.');
