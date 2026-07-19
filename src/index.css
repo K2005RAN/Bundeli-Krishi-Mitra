@@ -120,6 +120,54 @@ body.light-mode-active .glass-card:hover {
   transform: translateY(-5px) scale(1.01);
 }
 
+/* 3D Transform Utilities for AI Images & Cards */
+.preserve-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.tilt-element {
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-style: preserve-3d;
+}
+
+.tilt-element:hover {
+  transform: rotateY(10deg) rotateX(5deg) scale3d(1.02, 1.02, 1.02);
+}
+
+.tilt-element-reverse {
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-style: preserve-3d;
+}
+
+.tilt-element-reverse:hover {
+  transform: rotateY(-10deg) rotateX(-5deg) scale3d(1.02, 1.02, 1.02);
+}
+
+.translate-z-10 {
+  transform: translateZ(40px);
+}
+
+.translate-z-20 {
+  transform: translateZ(80px);
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) translateZ(20px); }
+  50% { transform: translateY(-15px) translateZ(40px); }
+  100% { transform: translateY(0px) translateZ(20px); }
+}
+
+.animate-float-3d {
+  animation: float 6s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+.animate-float-slow {
+  animation: float 8s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
 /* Voice Animation Waveforms */
 @keyframes modern-wave {
   0%, 100% { height: 10%; }

@@ -5,6 +5,7 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   hoverLift?: boolean;
   glass?: boolean;
   animate?: boolean;
+  tilt?: boolean;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -13,13 +14,14 @@ export const Card: React.FC<CardProps> = ({
   hoverLift = false,
   glass = false,
   animate = false,
+  tilt = false,
   ...props
 }) => {
   const baseClasses = `rounded-xl p-6 ${
     glass
-      ? 'glass-card'
+      ? 'glass-card backdrop-blur-xl bg-white/5 dark:bg-slate-900/40 border border-white/20 shadow-xl'
       : 'bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md'
-  } transition-all duration-300 ${hoverLift ? 'hover-lift' : ''}`;
+  } transition-all duration-300 ${hoverLift ? 'hover-lift' : ''} ${tilt ? 'tilt-element preserve-3d' : ''}`;
 
   if (animate) {
     return (

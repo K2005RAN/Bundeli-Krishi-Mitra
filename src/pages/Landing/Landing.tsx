@@ -16,7 +16,8 @@ import {
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
-import heroIllustration from '../../assets/farmer_hero_mockup.jpg';
+import futuristicFarmerAI from '../../assets/futuristic_farmer.jpg';
+import smartFarm3D from '../../assets/smart_farm.jpg';
 
 export const Landing: React.FC = () => {
   const navigate = useNavigate();
@@ -158,76 +159,47 @@ export const Landing: React.FC = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', damping: 20, stiffness: 100 }}
-            className="w-full relative rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/50 dark:border-slate-800/40 p-6 shadow-2xl glass"
+            className="w-full relative rounded-2xl p-2 glass-card tilt-element shadow-[0_20px_50px_rgba(16,185,129,0.2)]"
           >
-            {/* Phone/Device mockup inside card */}
-            <div className="rounded-xl border border-slate-100 dark:border-slate-805 bg-slate-50 dark:bg-slate-950 p-4 shadow-inner space-y-4">
-              <div className="flex items-center gap-3 border-b border-slate-200/50 dark:border-slate-800/50 pb-3">
-                <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-xs">KM</div>
-                <div className="flex-1">
-                  <p className="text-xs font-bold text-slate-855 dark:text-slate-200 leading-none">बुंदेली कृषि मित्र</p>
-                  <p className="text-[10px] text-green-500 font-medium leading-none mt-1">● ऑनलाइन सहायक</p>
-                </div>
-              </div>
-
-              {/* Chat simulation */}
-              <div className="space-y-3">
-                <div className="flex justify-end">
-                  <div className="bg-primary text-white text-xs px-3 py-2 rounded-2xl rounded-tr-none max-w-[80%] font-medium">
-                    भैया चने में इल्ली लग गई है, का करें?
+            {/* The main 3D image */}
+            <div className="relative rounded-xl overflow-hidden border border-white/10 animate-float-3d preserve-3d">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
+              <img src={futuristicFarmerAI} alt="3D Futuristic Farmer AI" className="w-full h-[450px] object-cover" />
+              
+              {/* Overlay Glass Panel inside the image container */}
+              <div className="absolute bottom-4 left-4 right-4 z-20 glass-card p-4 rounded-xl border border-white/20 translate-z-20">
+                <div className="flex items-center gap-3 mb-2 border-b border-white/10 pb-2">
+                  <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary text-xs">KM</div>
+                  <div className="flex-1">
+                    <p className="text-xs font-bold text-white leading-none">बुंदेली AI वैज्ञानिक</p>
+                    <p className="text-[10px] text-green-400 font-medium leading-none mt-1">● विश्लेषण सक्रिय (YOLOv8)</p>
                   </div>
                 </div>
-
-                {/* AI Leaf Scan illustration display */}
-                <div className="flex justify-end">
-                  <div className="rounded-xl overflow-hidden border border-primary/20 max-w-[70%] shadow-sm relative group">
-                    <img src={heroIllustration} alt="Scanned Leaf" className="w-full h-24 object-cover" />
-                    <div className="absolute inset-0 bg-primary/10 border border-primary animate-pulse" />
-                    <div className="absolute top-1 left-1.5 bg-black/60 backdrop-blur-sm text-[8px] text-white px-1.5 py-0.5 rounded font-display uppercase tracking-wider">
-                      YOLOv8: Scanning...
-                    </div>
-                  </div>
+                <div className="bg-black/40 border border-white/10 text-xs px-3 py-2 rounded-lg text-slate-200 leading-relaxed shadow-sm">
+                  राम राम भाई! फसल में नाइट्रोजन की कमी दिख रही है, यूरिया की सही मात्रा डालने का समय आ गया है।
                 </div>
-
-                <div className="flex justify-start">
-                  <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-xs px-3 py-2 rounded-2xl rounded-tl-none max-w-[80%] text-slate-700 dark:text-slate-300 leading-relaxed shadow-sm">
-                    राम राम भाई! चने की फसल में इल्ली भगाने लाने नीम को तेल ५% को छिड़काव कर देव, या फिर इमामेक्टिन बेंजोएट दवाई की ८० ग्राम मात्रा को १५० लीटर पानी में घोल के प्रति एकड़ छिड़क देव।
-                  </div>
-                </div>
-              </div>
-
-              {/* Wave & Mic simulator */}
-              <div className="flex items-center gap-3 pt-2">
-                <div className="flex-1 h-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-between px-3">
-                  <div className="flex gap-0.5 items-center">
-                    <div className="h-3 w-0.5 bg-primary rounded-full animate-pulse" />
-                    <div className="h-5 w-0.5 bg-primary rounded-full animate-pulse delay-75" />
-                    <div className="h-4 w-0.5 bg-primary rounded-full animate-pulse delay-150" />
-                    <div className="h-2 w-0.5 bg-slate-300 rounded-full" />
-                  </div>
-                  <span className="text-[10px] text-slate-400">बोलकर प्रश्न पूछें...</span>
-                </div>
-                <button className="h-9 w-9 rounded-full bg-primary flex items-center justify-center text-white shadow-md">
-                  <Mic className="h-4 w-4" />
-                </button>
               </div>
             </div>
 
             {/* Float badge 1 */}
-            <div className="absolute -top-4 -left-6 bg-white dark:bg-slate-800 border border-slate-150 dark:border-slate-700/50 rounded-xl p-3 shadow-lg flex items-center gap-2.5 z-10">
-              <Scan className="h-5 w-5 text-green-500" />
+            <div className="absolute -top-4 -left-6 glass-card border border-white/20 rounded-xl p-3 shadow-2xl flex items-center gap-2.5 z-30 animate-float-slow tilt-element">
+              <div className="bg-white/10 p-2 rounded-lg">
+                <Scan className="h-5 w-5 text-green-400" />
+              </div>
               <div className="text-left">
-                <p className="text-[10px] text-slate-400 font-semibold leading-none">रोग पहचान</p>
-                <p className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">९७% सटीकता</p>
+                <p className="text-[10px] text-slate-300 font-semibold leading-none">रोग पहचान</p>
+                <p className="text-xs font-bold text-white mt-1">९९% सटीकता</p>
               </div>
             </div>
 
             {/* Float badge 2 */}
-            <div className="absolute -bottom-4 -right-6 bg-white dark:bg-slate-800 border border-slate-150 dark:border-slate-700/50 rounded-xl p-3 shadow-lg flex items-center gap-2.5 z-10">
-              <CircleDollarSign className="h-5 w-5 text-yellow-500" />
+            <div className="absolute -bottom-4 -right-6 glass-card border border-white/20 rounded-xl p-3 shadow-2xl flex items-center gap-2.5 z-30 animate-float-slow tilt-element-reverse">
+              <div className="bg-white/10 p-2 rounded-lg">
+                <CircleDollarSign className="h-5 w-5 text-yellow-400" />
+              </div>
               <div className="text-left">
-                <p className="text-[10px] text-slate-400 font-semibold leading-none">मंडी भाव (गेहूं)</p>
-                <p className="text-xs font-bold text-slate-800 dark:text-slate-200 mt-1">₹२,४५० / क्वि.</p>
+                <p className="text-[10px] text-slate-300 font-semibold leading-none">मंडी भाव (लाइव)</p>
+                <p className="text-xs font-bold text-white mt-1">₹२,४५० / क्वि.</p>
               </div>
             </div>
           </motion.div>
@@ -253,17 +225,26 @@ export const Landing: React.FC = () => {
       </section>
 
       {/* Features Grid */}
-      <section className="max-w-7xl mx-auto px-6 py-24 text-left">
+      <section className="max-w-7xl mx-auto px-6 py-24 text-left relative">
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <h3 className="text-3xl font-bold font-display text-white">प्रमुख सुविधाएँ (Core Features)</h3>
           <p className="text-sm text-slate-400">किसान भाइयों के लिए विशेष रूप से बनाई गई स्मार्ट ए.आई. सेवाएँ</p>
+        </div>
+
+        {/* 3D Smart Farm Banner */}
+        <div className="w-full h-64 md:h-80 mb-16 rounded-3xl overflow-hidden relative glass-card tilt-element shadow-2xl border border-white/10 group">
+          <img src={smartFarm3D} alt="3D Smart Farm" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-8">
+            <h4 className="text-2xl font-bold font-display text-white mb-2">आधुनिक डिजिटल खेती</h4>
+            <p className="text-sm text-slate-300 max-w-xl">कृत्रिम बुद्धिमत्ता (AI) और 3D तकनीक के साथ, अपनी खेती को बनाएं और भी ज्यादा स्मार्ट और सुरक्षित।</p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feat, idx) => {
             const Icon = feat.icon;
             return (
-              <Card key={idx} className="p-8 glass flex flex-col justify-between h-64">
+              <Card key={idx} hoverLift glass tilt className="p-8 flex flex-col justify-between h-64">
                 <div className="space-y-4">
                   <div className={`h-12 w-12 rounded-xl flex items-center justify-center ${feat.color}`}>
                     <Icon className="h-6 w-6" />
