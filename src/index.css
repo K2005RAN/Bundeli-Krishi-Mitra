@@ -160,6 +160,12 @@ body.light-mode-active .glass-card:hover {
   100% { transform: translateY(0px) translateZ(20px); }
 }
 
+@keyframes scan {
+  0%, 100% { transform: translateY(0px); opacity: 0; }
+  10%, 90% { opacity: 0.5; }
+  50% { transform: translateY(450px); opacity: 0.5; }
+}
+
 .animate-float-3d {
   animation: float 6s ease-in-out infinite;
   transform-style: preserve-3d;

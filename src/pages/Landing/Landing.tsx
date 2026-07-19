@@ -12,7 +12,9 @@ import {
   Award,
   Users,
   CheckCircle,
-  HelpCircle
+  HelpCircle,
+  Droplets,
+  Leaf
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
@@ -157,70 +159,113 @@ export const Landing: React.FC = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', damping: 20, stiffness: 100 }}
-            className="w-full relative rounded-2xl p-2 glass-card tilt-element shadow-[0_20px_50px_rgba(16,185,129,0.2)] h-[450px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 border border-white/10"
+            className="w-full relative rounded-3xl p-2 glass-card tilt-element shadow-[0_20px_50px_rgba(16,185,129,0.15)] h-[480px] flex items-center justify-center overflow-hidden border border-white/5 bg-[#050505]"
           >
-            {/* Holographic Glowing Rings */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-64 h-64 border border-primary/30 rounded-full animate-[spin_10s_linear_infinite]" />
-              <div className="absolute w-48 h-48 border border-secondary/30 rounded-full animate-[spin_7s_linear_infinite_reverse]" />
-              <div className="absolute w-32 h-32 bg-primary/10 rounded-full blur-xl animate-pulse" />
+            {/* Dark Grid Background */}
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:30px_30px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)]" />
+
+            {/* Central Glowing AI Core */}
+            <div className="relative z-10 flex items-center justify-center">
+              {/* Outer pulsing ring */}
+              <div className="absolute w-80 h-80 border border-primary/20 rounded-full animate-[spin_12s_linear_infinite]" />
+              <div className="absolute w-80 h-80 border-t-2 border-primary/40 rounded-full animate-[spin_8s_linear_infinite_reverse]" />
+              
+              {/* Middle dashed ring */}
+              <div className="absolute w-64 h-64 border-[1.5px] border-dashed border-secondary/30 rounded-full animate-[spin_20s_linear_infinite]" />
+              
+              {/* Inner energetic core */}
+              <div className="absolute w-40 h-40 bg-primary/10 rounded-full blur-xl animate-pulse" />
+              <div className="absolute w-32 h-32 bg-primary/20 rounded-full blur-lg animate-pulse delay-75" />
+              
+              {/* Core element */}
+              <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-primary to-emerald-900 border border-white/20 shadow-[0_0_40px_rgba(16,185,129,0.5)] flex items-center justify-center z-20">
+                <Leaf className="h-10 w-10 text-white animate-pulse" />
+                <div className="absolute inset-0 rounded-full bg-white/20 animate-ping opacity-20" />
+              </div>
             </div>
 
-            {/* Simulated UI Panel */}
-            <div className="relative z-10 w-full max-w-sm glass-card border border-white/20 p-5 rounded-xl animate-float-3d shadow-2xl bg-black/40 backdrop-blur-md">
-              <div className="flex items-center gap-3 mb-4 border-b border-white/10 pb-3">
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-bold text-white shadow-lg">KM</div>
-                <div className="flex-1 text-left">
-                  <p className="text-sm font-bold text-white leading-none">ए.आई. कृषि सहायक</p>
-                  <p className="text-[10px] text-secondary font-medium mt-1 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
-                    लाइव विश्लेषण
-                  </p>
+            {/* Scanning Beam */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50 shadow-[0_0_15px_rgba(16,185,129,1)] animate-[scan_3s_ease-in-out_infinite]" />
+
+            {/* Floating Data Panels */}
+            
+            {/* Panel 1: Soil Moisture */}
+            <div className="absolute top-12 left-8 glass-card border border-white/10 rounded-2xl p-4 shadow-2xl z-30 animate-float-3d bg-black/40 backdrop-blur-md">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
+                  <Droplets className="h-5 w-5 text-blue-400" />
+                </div>
+                <div>
+                  <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">मृदा नमी</p>
+                  <div className="flex items-end gap-2 mt-1">
+                    <span className="text-xl font-bold text-white leading-none">४२%</span>
+                    <span className="text-[10px] text-blue-400 font-medium">इष्टतम</span>
+                  </div>
                 </div>
               </div>
-              
+              {/* Mini chart */}
+              <div className="mt-3 flex gap-1 h-6 items-end">
+                {[40, 60, 45, 80, 55, 75, 42].map((h, i) => (
+                  <div key={i} className="flex-1 bg-blue-500/30 rounded-t-sm" style={{ height: `${h}%` }} />
+                ))}
+              </div>
+            </div>
+
+            {/* Panel 2: Disease Detection AI */}
+            <div className="absolute bottom-12 left-6 glass-card border border-primary/30 rounded-2xl p-4 shadow-[0_10px_30px_rgba(16,185,129,0.15)] z-30 animate-float-slow tilt-element bg-black/60 backdrop-blur-md w-56">
+              <div className="flex items-center gap-3 mb-3 border-b border-white/10 pb-3">
+                <div className="relative">
+                  <Scan className="h-6 w-6 text-primary" />
+                  <span className="absolute top-0 right-0 w-2 h-2 bg-primary rounded-full animate-ping" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-white">रोग विश्लेषण सक्रिय</p>
+                  <p className="text-[9px] text-primary mt-0.5">YOLOv8 Neural Network</p>
+                </div>
+              </div>
               <div className="space-y-3">
-                <div className="flex justify-end">
-                  <div className="bg-primary/20 border border-primary/30 text-white text-[11px] px-3 py-2 rounded-2xl rounded-tr-none max-w-[85%] font-medium text-left">
-                    भैया, मेरे चने में पीलापन आ रहा है, क्या करें?
+                <div>
+                  <div className="flex justify-between items-center text-[10px] mb-1">
+                    <span className="text-slate-300">पत्ती धब्बा (Leaf Spot)</span>
+                    <span className="text-white font-bold">०.०१%</span>
+                  </div>
+                  <div className="w-full bg-slate-800 rounded-full h-1.5">
+                    <div className="bg-primary h-1.5 rounded-full w-[5%]" />
                   </div>
                 </div>
-                <div className="flex justify-start">
-                  <div className="glass-card text-[11px] px-3 py-2 rounded-2xl rounded-tl-none max-w-[90%] text-slate-200 leading-relaxed text-left border border-white/10">
-                    राम राम! यह नाइट्रोजन की कमी या पीला रतुआ हो सकता है। कृपया एक साफ फोटो खींचकर अपलोड करें।
+                <div>
+                  <div className="flex justify-between items-center text-[10px] mb-1">
+                    <span className="text-slate-300">स्वस्थ फसल (Healthy)</span>
+                    <span className="text-primary font-bold">९९.९%</span>
+                  </div>
+                  <div className="w-full bg-slate-800 rounded-full h-1.5">
+                    <div className="bg-primary h-1.5 rounded-full w-[99%]" />
                   </div>
                 </div>
-              </div>
-              
-              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between px-2">
-                <div className="flex gap-1">
-                  <div className="w-1 h-3 bg-primary rounded-full animate-pulse" />
-                  <div className="w-1 h-4 bg-secondary rounded-full animate-pulse delay-75" />
-                  <div className="w-1 h-2 bg-primary rounded-full animate-pulse delay-150" />
-                </div>
-                <Scan className="h-4 w-4 text-slate-400" />
               </div>
             </div>
 
-            {/* Float badge 1 */}
-            <div className="absolute -top-4 -left-6 glass-card border border-white/20 rounded-xl p-3 shadow-2xl flex items-center gap-2.5 z-30 animate-float-slow tilt-element">
-              <div className="bg-white/10 p-2 rounded-lg">
-                <Scan className="h-5 w-5 text-green-400" />
+            {/* Panel 3: AI Voice Assistant */}
+            <div className="absolute top-1/2 -translate-y-1/2 right-6 glass-card border border-accent/20 rounded-2xl p-4 shadow-2xl z-30 animate-float-3d delay-150 bg-black/40 backdrop-blur-md w-56">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="h-8 w-8 rounded-full bg-accent/20 flex items-center justify-center border border-accent/30">
+                    <Mic className="h-4 w-4 text-accent animate-pulse" />
+                  </div>
+                  <p className="text-[11px] font-bold text-white">बुंदेली AI वॉइस</p>
+                </div>
+                <span className="flex h-2 w-2 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+                </span>
               </div>
-              <div className="text-left">
-                <p className="text-[10px] text-slate-300 font-semibold leading-none">रोग पहचान</p>
-                <p className="text-xs font-bold text-white mt-1">९९% सटीकता</p>
-              </div>
-            </div>
-
-            {/* Float badge 2 */}
-            <div className="absolute -bottom-4 -right-6 glass-card border border-white/20 rounded-xl p-3 shadow-2xl flex items-center gap-2.5 z-30 animate-float-slow tilt-element-reverse">
-              <div className="bg-white/10 p-2 rounded-lg">
-                <CircleDollarSign className="h-5 w-5 text-yellow-400" />
-              </div>
-              <div className="text-left">
-                <p className="text-[10px] text-slate-300 font-semibold leading-none">मंडी भाव (लाइव)</p>
-                <p className="text-xs font-bold text-white mt-1">₹२,४५० / क्वि.</p>
+              <p className="text-[10px] text-slate-300 italic mb-3 leading-relaxed border-l-2 border-accent/50 pl-2">
+                "राम राम! आज मौसम साफ रएगो, खाद डारबे को सही समय आय।"
+              </p>
+              <div className="flex items-center justify-center gap-1 h-4">
+                {[1, 2, 3, 4, 5, 4, 3, 2, 1].map((i, idx) => (
+                  <div key={idx} className="w-1 bg-accent rounded-full voice-bar" style={{ animationDelay: `${idx * 0.1}s` }} />
+                ))}
               </div>
             </div>
           </motion.div>
