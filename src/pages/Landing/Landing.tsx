@@ -297,40 +297,34 @@ export const Landing: React.FC = () => {
           <p className="text-sm text-slate-400">किसान भाइयों के लिए विशेष रूप से बनाई गई स्मार्ट ए.आई. सेवाएँ</p>
         </div>
 
-        {/* 3D Smart Farm Banner - Premium Holographic Grid */}
-        <div className="w-full h-64 md:h-80 mb-16 rounded-3xl overflow-hidden relative glass-card border border-white/5 bg-[#030303] flex items-center justify-center group perspective-[1000px]">
+        {/* 3D Smart Farm Banner - Ethereal Aurora Glass */}
+        <div className="w-full h-64 md:h-80 mb-16 rounded-3xl overflow-hidden relative border border-white/5 bg-[#030303] flex items-center justify-center group">
           
-          {/* Animated Isometric Grid */}
-          <div 
-            className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.15)_1px,transparent_1px)] bg-[size:40px_40px] animate-[pulse_4s_ease-in-out_infinite]" 
-            style={{ transform: 'rotateX(60deg) scale(1.5) translateY(-3rem)', transformStyle: 'preserve-3d' }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303]" />
-          </div>
-
-          {/* Floating Data Nodes on Grid */}
+          {/* Animated Aurora Orbs */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary rounded-full shadow-[0_0_15px_#10b981] animate-ping" />
-            <div className="absolute top-3/4 left-2/3 w-2 h-2 bg-secondary rounded-full shadow-[0_0_15px_#f59e0b] animate-ping delay-300" />
-            <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-blue-500 rounded-full shadow-[0_0_15px_#3b82f6] animate-ping delay-700" />
-            
-            {/* Vertical Data Streams */}
-            <div className="absolute top-0 left-1/3 w-px h-full bg-gradient-to-b from-transparent via-primary/50 to-transparent animate-[scan_2s_linear_infinite]" />
-            <div className="absolute top-0 right-1/3 w-px h-full bg-gradient-to-b from-transparent via-secondary/50 to-transparent animate-[scan_3s_linear_infinite_reverse]" />
+            <div className="absolute -top-20 -left-20 w-64 h-64 bg-primary/20 rounded-full blur-[80px] animate-[pulse_6s_ease-in-out_infinite]" />
+            <div className="absolute top-1/2 -right-20 w-80 h-80 bg-secondary/15 rounded-full blur-[100px] animate-[pulse_8s_ease-in-out_infinite_reverse]" />
+            <div className="absolute -bottom-20 left-1/3 w-72 h-72 bg-blue-500/15 rounded-full blur-[90px] animate-[pulse_10s_ease-in-out_infinite]" />
           </div>
 
-          {/* Center Content Panel */}
-          <div className="relative z-20 flex flex-col items-center justify-center p-8 text-center glass-card bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(16,185,129,0.1)] transform transition-transform duration-500 group-hover:scale-105 group-hover:shadow-[0_0_60px_rgba(16,185,129,0.2)] max-w-3xl">
-            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-primary/20 to-transparent flex items-center justify-center mb-4 border border-primary/30 shadow-lg relative">
-              <TrendingUp className="h-8 w-8 text-primary" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-secondary rounded-full animate-pulse border-2 border-black" />
+          {/* Subtly Animated Starfield (Noise/Dots) */}
+          <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:24px_24px] opacity-20" />
+
+          {/* Center Glass Panel */}
+          <div className="relative z-20 flex flex-col items-center justify-center p-8 md:p-12 text-center glass-card bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] transform transition-transform duration-700 group-hover:scale-105 max-w-4xl mx-4">
+            <div className="h-14 w-14 rounded-2xl bg-white/5 backdrop-blur-md flex items-center justify-center mb-5 border border-white/10 shadow-inner relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-transparent" />
+              <TrendingUp className="h-7 w-7 text-white relative z-10" />
             </div>
-            <h4 className="text-3xl md:text-4xl font-bold font-display text-white mb-3 tracking-wide">
-              आधुनिक <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">डिजिटल</span> खेती
+            <h4 className="text-3xl md:text-5xl font-extrabold font-display text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 mb-4 tracking-tight">
+              आधुनिक डिजिटल खेती
             </h4>
-            <p className="text-sm md:text-base text-slate-300 max-w-2xl font-medium">
-              कृत्रिम बुद्धिमत्ता (AI) और आधुनिक 3D डेटा-ग्रिड तकनीक के साथ, अपनी खेती को बनाएं और भी ज्यादा स्मार्ट और सुरक्षित।
+            <p className="text-sm md:text-lg text-slate-300 max-w-2xl font-medium leading-relaxed">
+              कृत्रिम बुद्धिमत्ता (AI) और आधुनिक तकनीकों के साथ, अपनी खेती को बनाएं और भी ज्यादा स्मार्ट और सुरक्षित।
             </p>
+            
+            {/* Elegant glowing underline */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/3 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
           </div>
         </div>
 
