@@ -117,9 +117,10 @@ export const Dashboard: React.FC = () => {
   return (
     <div className="space-y-6 text-left pb-10">
       {/* Welcome Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800/80 shadow-sm">
-        <div>
-          <h2 className="text-2xl font-bold text-slate-800 dark:text-white">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-8 rounded-3xl glass-card border border-primary/20 shadow-[0_10px_40px_rgba(16,185,129,0.1)] relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[80px] -z-10 group-hover:bg-primary/20 transition-all duration-700"></div>
+        <div className="z-10">
+          <h2 className="text-3xl font-bold font-display bg-gradient-to-r from-primary to-emerald-400 bg-clip-text text-transparent">
             राम राम, {user?.name}!
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
@@ -144,9 +145,9 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* Grid: 4 Widget Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 perspective-1000">
         {/* Weather Card */}
-        <Card className="flex flex-col justify-between">
+        <Card className="flex flex-col justify-between" glass tilt hoverLift>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-semibold text-slate-500 dark:text-slate-400">आज का मौसम ({user?.district})</CardTitle>
             <CloudSun className="h-5 w-5 text-primary" />
@@ -169,7 +170,7 @@ export const Dashboard: React.FC = () => {
         </Card>
 
         {/* Latest Disease Scan */}
-        <Card className="flex flex-col justify-between">
+        <Card className="flex flex-col justify-between" glass tilt hoverLift>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-semibold text-slate-500 dark:text-slate-400">पिछली बीमारी जांच</CardTitle>
             <CalendarDays className="h-5 w-5 text-green-600" />
@@ -204,7 +205,7 @@ export const Dashboard: React.FC = () => {
         </Card>
 
         {/* Mandi Price Widget */}
-        <Card className="flex flex-col justify-between">
+        <Card className="flex flex-col justify-between" glass tilt hoverLift>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-semibold text-slate-500 dark:text-slate-400">बाज़ार भाव (मुख्य मंडी)</CardTitle>
             <TrendingUp className="h-5 w-5 text-yellow-500" />
@@ -237,7 +238,7 @@ export const Dashboard: React.FC = () => {
         </Card>
 
         {/* Dynamic Alerts count */}
-        <Card className="flex flex-col justify-between">
+        <Card className="flex flex-col justify-between" glass tilt hoverLift>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-semibold text-slate-500 dark:text-slate-400">सक्रिय कृषि सूचनाएं</CardTitle>
             <FileCheck2 className="h-5 w-5 text-red-500" />
@@ -284,7 +285,7 @@ export const Dashboard: React.FC = () => {
           )}
 
           {/* Daily Tasks checklist */}
-          <Card>
+          <Card glass tilt hoverLift>
             <CardHeader className="flex flex-row items-center gap-2">
               <ListTodo className="h-5 w-5 text-primary" />
               <CardTitle className="text-base font-bold">आज के अनुशंसित कार्य (Checklist)</CardTitle>
@@ -308,7 +309,7 @@ export const Dashboard: React.FC = () => {
 
         {/* Right: History & Actions */}
         <div className="lg:col-span-4 space-y-6">
-          <Card>
+          <Card glass tilt hoverLift>
             <CardHeader>
               <CardTitle className="text-base font-bold">आसान टूल्स (Quick Actions)</CardTitle>
             </CardHeader>
@@ -343,9 +344,9 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* Analytics Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 perspective-1000">
         {/* Weather Trend Forecast Chart */}
-        <Card className="p-4">
+        <Card className="p-4" glass tilt hoverLift>
           <CardHeader className="pb-4">
             <CardTitle className="text-base font-bold">7-दिवसीय मौसम एवं वर्षा पूर्वानुमान</CardTitle>
           </CardHeader>
@@ -382,7 +383,7 @@ export const Dashboard: React.FC = () => {
         </Card>
 
         {/* Crop Scans Distribution chart */}
-        <Card className="p-4">
+        <Card className="p-4" glass tilt hoverLift>
           <CardHeader className="pb-4">
             <CardTitle className="text-base font-bold">फसल बीमारी जांच विश्लेषण (इतिहास)</CardTitle>
           </CardHeader>

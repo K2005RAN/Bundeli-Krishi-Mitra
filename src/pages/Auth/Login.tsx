@@ -39,8 +39,13 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-mesh flex items-center justify-center p-4">
-      <Card className="w-full max-w-md p-8 glass" hoverLift={false}>
+    <div className="min-h-screen bg-gradient-mesh flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Decorative background glow orbs */}
+      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-primary/20 rounded-full blur-[100px] animate-pulse pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-accent/20 rounded-full blur-[100px] animate-pulse delay-1000 pointer-events-none" />
+      
+      <div className="w-full max-w-md perspective-1000 z-10">
+        <Card className="w-full p-8 glass-card border border-white/20 shadow-2xl" glass tilt hoverLift={false}>
         {/* Brand */}
         <div className="flex flex-col items-center mb-8">
           <div className="h-12 w-12 rounded-2xl bg-primary flex items-center justify-center text-white shadow-lg mb-3">
@@ -98,13 +103,16 @@ export const Login: React.FC = () => {
         </form>
 
         {/* Sign up prompt */}
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-8 text-center">
-          खाता नहीं है?{' '}
-          <Link to="/register" className="text-primary font-bold hover:underline">
-            पंजीकरण करें (Sign Up)
-          </Link>
-        </p>
+        <div className="mt-8 text-center border-t border-slate-200/50 dark:border-slate-800/50 pt-6">
+          <p className="text-sm text-slate-600 dark:text-slate-400">
+            क्या आपका खाता नहीं है?{' '}
+            <Link to="/register" className="text-primary hover:text-primary-hover font-bold hover:underline transition-all">
+              अभी पंजीकरण करें
+            </Link>
+          </p>
+        </div>
       </Card>
+      </div>
     </div>
   );
 };
