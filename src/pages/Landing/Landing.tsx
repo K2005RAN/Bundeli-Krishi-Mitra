@@ -297,23 +297,39 @@ export const Landing: React.FC = () => {
           <p className="text-sm text-slate-400">किसान भाइयों के लिए विशेष रूप से बनाई गई स्मार्ट ए.आई. सेवाएँ</p>
         </div>
 
-        {/* 3D Smart Farm Banner (CSS Only) */}
-        <div className="w-full h-64 md:h-80 mb-16 rounded-3xl overflow-hidden relative glass-card tilt-element shadow-2xl border border-white/10 group bg-gradient-to-r from-primary/80 to-emerald-900/80 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-10" />
+        {/* 3D Smart Farm Banner - Premium Holographic Grid */}
+        <div className="w-full h-64 md:h-80 mb-16 rounded-3xl overflow-hidden relative glass-card border border-white/5 bg-[#030303] flex items-center justify-center group perspective-[1000px]">
           
-          {/* Animated decorative glowing lines */}
-          <div className="absolute inset-0 z-0 opacity-30">
-            <div className="absolute top-1/4 left-0 w-full h-[1px] bg-white transform -rotate-12 animate-pulse" />
-            <div className="absolute top-3/4 left-0 w-full h-[1px] bg-white transform rotate-6 animate-pulse delay-500" />
+          {/* Animated Isometric Grid */}
+          <div 
+            className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.15)_1px,transparent_1px)] bg-[size:40px_40px] animate-[pulse_4s_ease-in-out_infinite]" 
+            style={{ transform: 'rotateX(60deg) scale(1.5) translateY(-3rem)', transformStyle: 'preserve-3d' }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303]" />
           </div>
 
-          <div className="relative z-20 flex flex-col items-center justify-center p-8 text-center">
-            <div className="h-16 w-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center mb-4 border border-white/20 shadow-lg">
-              <TrendingUp className="h-8 w-8 text-white" />
+          {/* Floating Data Nodes on Grid */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary rounded-full shadow-[0_0_15px_#10b981] animate-ping" />
+            <div className="absolute top-3/4 left-2/3 w-2 h-2 bg-secondary rounded-full shadow-[0_0_15px_#f59e0b] animate-ping delay-300" />
+            <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-blue-500 rounded-full shadow-[0_0_15px_#3b82f6] animate-ping delay-700" />
+            
+            {/* Vertical Data Streams */}
+            <div className="absolute top-0 left-1/3 w-px h-full bg-gradient-to-b from-transparent via-primary/50 to-transparent animate-[scan_2s_linear_infinite]" />
+            <div className="absolute top-0 right-1/3 w-px h-full bg-gradient-to-b from-transparent via-secondary/50 to-transparent animate-[scan_3s_linear_infinite_reverse]" />
+          </div>
+
+          {/* Center Content Panel */}
+          <div className="relative z-20 flex flex-col items-center justify-center p-8 text-center glass-card bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_50px_rgba(16,185,129,0.1)] transform transition-transform duration-500 group-hover:scale-105 group-hover:shadow-[0_0_60px_rgba(16,185,129,0.2)] max-w-3xl">
+            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-primary/20 to-transparent flex items-center justify-center mb-4 border border-primary/30 shadow-lg relative">
+              <TrendingUp className="h-8 w-8 text-primary" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-secondary rounded-full animate-pulse border-2 border-black" />
             </div>
-            <h4 className="text-3xl md:text-4xl font-bold font-display text-white mb-3">आधुनिक डिजिटल खेती</h4>
-            <p className="text-sm md:text-base text-white/90 max-w-2xl font-medium">
-              कृत्रिम बुद्धिमत्ता (AI) और आधुनिक तकनीकों के साथ, अपनी खेती को बनाएं और भी ज्यादा स्मार्ट और सुरक्षित।
+            <h4 className="text-3xl md:text-4xl font-bold font-display text-white mb-3 tracking-wide">
+              आधुनिक <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">डिजिटल</span> खेती
+            </h4>
+            <p className="text-sm md:text-base text-slate-300 max-w-2xl font-medium">
+              कृत्रिम बुद्धिमत्ता (AI) और आधुनिक 3D डेटा-ग्रिड तकनीक के साथ, अपनी खेती को बनाएं और भी ज्यादा स्मार्ट और सुरक्षित।
             </p>
           </div>
         </div>
