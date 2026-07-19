@@ -29,7 +29,7 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     );
   }
 
-  return user ? <Layout>{children}</Layout> : <Navigate to="/login" replace />;
+  return user ? <Layout>{children}</Layout> : <Navigate to="/" replace />;
 };
 
 // Admin Route Guard (Check if logged in AND is admin scientist)
@@ -45,7 +45,7 @@ const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   if (user.role !== 'admin') {
