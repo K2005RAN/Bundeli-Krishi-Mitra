@@ -27,14 +27,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(curUser);
     }
     
-    // Check saved theme
-    const savedTheme = localStorage.getItem('km_theme') as 'light' | 'dark' | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-      applyTheme(savedTheme);
-    } else {
-      applyTheme('dark');
-    }
+    // Force Dark Mode permanently
+    setTheme('dark');
+    applyTheme('dark');
     setLoading(false);
   }, []);
 
@@ -51,10 +46,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const toggleTheme = () => {
-    const nextTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(nextTheme);
-    localStorage.setItem('km_theme', nextTheme);
-    applyTheme(nextTheme);
+    // Theme toggling disabled to enforce dark mode globally
   };
 
   const login = async (phone: string, password?: string) => {
