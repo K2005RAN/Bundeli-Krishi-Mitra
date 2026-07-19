@@ -578,7 +578,20 @@ app.get('/api/weather/coordinates', async (req, res) => {
       };
     });
 
-    res.json({ current, forecast });
+    // Reverse Geocoding to get City/Locality Name
+    let locationName = 'मेरी लोकेशन (Current Location)';
+    try {
+      const geoRes = await axios.get(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`);
+      if (geoRes.data && geoRes.data.locality) {
+        locationName = geoRes.data.locality;
+      } else if (geoRes.data && geoRes.data.city) {
+        locationName = geoRes.data.city;
+      }
+    } catch (e) {
+      console.error('Reverse Geocode Error:', e.message);
+    }
+
+    res.json({ current, forecast, locationName });
   } catch (error) {
     console.error('Weather Coordinates API Error:', error);
     res.status(500).json({ error: error.message });

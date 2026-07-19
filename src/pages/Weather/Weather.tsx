@@ -73,7 +73,7 @@ export const Weather: React.FC = () => {
           const data = await mockApi.getWeatherByCoordinates(latitude, longitude);
           setCurrent(data.current);
           setForecast(data.forecast);
-          setLocationName('मेरी लोकेशन (Current Location)');
+          setLocationName(data.locationName || 'मेरी लोकेशन');
         } catch (error) {
           console.error(error);
           alert('Failed to fetch weather for your location.');

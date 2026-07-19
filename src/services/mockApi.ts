@@ -260,9 +260,9 @@ export const mockApi = {
     }
   },
 
-  getWeatherByCoordinates: async (lat: number, lon: number): Promise<{ current: WeatherCondition; forecast: ForecastDay[] }> => {
+  getWeatherByCoordinates: async (lat: number, lon: number): Promise<{ current: WeatherCondition; forecast: ForecastDay[]; locationName?: string }> => {
     try {
-      const res = await api.get<{ current: WeatherCondition; forecast: ForecastDay[] }>(`/weather/coordinates?lat=${lat}&lon=${lon}`);
+      const res = await api.get<{ current: WeatherCondition; forecast: ForecastDay[]; locationName?: string }>(`/weather/coordinates?lat=${lat}&lon=${lon}`);
       return res.data;
     } catch (err) {
       console.error('Coordinates weather API failed, using fallback:', err);
