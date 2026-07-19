@@ -25,6 +25,50 @@ const api = axios.create({
   },
 });
 
+const fetchOpenMeteoWeather = async (lat: number, lon: number) => {
+  const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,precipitation,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`;
+  const weatherRes = await fetch(weatherUrl);
+  const weatherData = await weatherRes.json();
+  
+  const getCondition = (code: number) => {
+    if (code === 0) return { eng: 'Clear sky', hi: 'धूप कड़क है' };
+    if (code >= 1 && code <= 3) return { eng: 'Partly cloudy', hi: 'बादल छाए हैं' };
+    if (code >= 45 && code <= 48) return { eng: 'Fog', hi: 'कोहरा है' };
+    if (code >= 51 && code <= 67) return { eng: 'Rain', hi: 'पानी बरस सकत है' };
+    if (code >= 71 && code <= 77) return { eng: 'Snow', hi: 'बर्फ़ गिर रही है' };
+    if (code >= 80 && code <= 82) return { eng: 'Showers', hi: 'तेज पानी गिर रओ' };
+    if (code >= 95 && code <= 99) return { eng: 'Thunderstorm', hi: 'बिजली कड़क रही है' };
+    return { eng: 'Clear', hi: 'साफ मौसम' };
+  };
+
+  const currentCond = getCondition(weatherData.current.weather_code);
+  
+  const current = {
+    temp: Math.round(weatherData.current.temperature_2m),
+    humidity: Math.round(weatherData.current.relative_humidity_2m),
+    rainProb: weatherData.daily.precipitation_probability_max?.[0] || 0,
+    windSpeed: Math.round(weatherData.current.wind_speed_10m),
+    uvIndex: 6,
+    condition: currentCond.eng,
+    conditionBundeli: currentCond.hi
+  };
+
+  const days = ['रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'];
+  
+  const forecast = weatherData.daily.time.map((timeStr: string, index: number) => {
+    const date = new Date(timeStr);
+    return {
+      day: days[date.getDay()],
+      tempMax: Math.round(weatherData.daily.temperature_2m_max[index]),
+      tempMin: Math.round(weatherData.daily.temperature_2m_min[index]),
+      condition: getCondition(weatherData.daily.weather_code[index]).eng,
+      rainProb: weatherData.daily.precipitation_probability_max?.[index] || 0
+    };
+  });
+
+  return { current, forecast };
+};
+
 // database service adapters
 export const mockApi = {
   // --- AUTH SERVICES ---
@@ -239,10 +283,24 @@ export const mockApi = {
     return res.data.map(a => ({ ...a, id: (a as any)._id || a.id }));
   },
 
+
+
   getWeatherCondition: async (district: string): Promise<{ current: WeatherCondition; forecast: ForecastDay[] }> => {
     try {
-      const res = await api.get<{ current: WeatherCondition; forecast: ForecastDay[] }>(`/weather/live/${district}`);
-      return res.data;
+      let searchDistrict = district;
+      const distMap: Record<string, string> = {
+        'दमोह': 'Damoh', 'सागर': 'Sagar', 'झाँसी': 'Jhansi', 'टीकमगढ़': 'Tikamgarh',
+        'ललितपुर': 'Lalitpur', 'छतरपुर': 'Chhatarpur', 'पन्ना': 'Panna'
+      };
+      if (distMap[district]) searchDistrict = distMap[district];
+      
+      const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(searchDistrict)}&count=1&language=en&format=json`);
+      const geoData = await geoRes.json();
+      
+      if (!geoData.results || geoData.results.length === 0) throw new Error('District not found');
+      
+      const { latitude, longitude } = geoData.results[0];
+      return await fetchOpenMeteoWeather(latitude, longitude);
     } catch (err) {
       console.error('Live weather API failed, using fallback:', err);
       return {
@@ -262,8 +320,7 @@ export const mockApi = {
 
   getWeatherByCoordinates: async (lat: number, lon: number): Promise<{ current: WeatherCondition; forecast: ForecastDay[]; locationName?: string }> => {
     try {
-      const res = await api.get<{ current: WeatherCondition; forecast: ForecastDay[]; locationName?: string }>(`/weather/coordinates?lat=${lat}&lon=${lon}`);
-      return res.data;
+      return await fetchOpenMeteoWeather(lat, lon);
     } catch (err) {
       console.error('Coordinates weather API failed, using fallback:', err);
       return {
