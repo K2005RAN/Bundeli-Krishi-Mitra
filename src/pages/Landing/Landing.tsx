@@ -16,8 +16,6 @@ import {
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
-import futuristicFarmerAI from '../../assets/futuristic_farmer.jpg';
-import smartFarm3D from '../../assets/smart_farm.jpg';
 
 export const Landing: React.FC = () => {
   const navigate = useNavigate();
@@ -159,25 +157,48 @@ export const Landing: React.FC = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', damping: 20, stiffness: 100 }}
-            className="w-full relative rounded-2xl p-2 glass-card tilt-element shadow-[0_20px_50px_rgba(16,185,129,0.2)]"
+            className="w-full relative rounded-2xl p-2 glass-card tilt-element shadow-[0_20px_50px_rgba(16,185,129,0.2)] h-[450px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 border border-white/10"
           >
-            {/* The main 3D image */}
-            <div className="relative rounded-xl overflow-hidden border border-white/10 animate-float-3d preserve-3d">
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
-              <img src={futuristicFarmerAI} alt="3D Futuristic Farmer AI" className="w-full h-[450px] object-cover" />
+            {/* Holographic Glowing Rings */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-64 h-64 border border-primary/30 rounded-full animate-[spin_10s_linear_infinite]" />
+              <div className="absolute w-48 h-48 border border-secondary/30 rounded-full animate-[spin_7s_linear_infinite_reverse]" />
+              <div className="absolute w-32 h-32 bg-primary/10 rounded-full blur-xl animate-pulse" />
+            </div>
+
+            {/* Simulated UI Panel */}
+            <div className="relative z-10 w-full max-w-sm glass-card border border-white/20 p-5 rounded-xl animate-float-3d shadow-2xl bg-black/40 backdrop-blur-md">
+              <div className="flex items-center gap-3 mb-4 border-b border-white/10 pb-3">
+                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-bold text-white shadow-lg">KM</div>
+                <div className="flex-1 text-left">
+                  <p className="text-sm font-bold text-white leading-none">ए.आई. कृषि सहायक</p>
+                  <p className="text-[10px] text-secondary font-medium mt-1 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
+                    लाइव विश्लेषण
+                  </p>
+                </div>
+              </div>
               
-              {/* Overlay Glass Panel inside the image container */}
-              <div className="absolute bottom-4 left-4 right-4 z-20 glass-card p-4 rounded-xl border border-white/20 translate-z-20">
-                <div className="flex items-center gap-3 mb-2 border-b border-white/10 pb-2">
-                  <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary text-xs">KM</div>
-                  <div className="flex-1">
-                    <p className="text-xs font-bold text-white leading-none">बुंदेली AI वैज्ञानिक</p>
-                    <p className="text-[10px] text-green-400 font-medium leading-none mt-1">● विश्लेषण सक्रिय (YOLOv8)</p>
+              <div className="space-y-3">
+                <div className="flex justify-end">
+                  <div className="bg-primary/20 border border-primary/30 text-white text-[11px] px-3 py-2 rounded-2xl rounded-tr-none max-w-[85%] font-medium text-left">
+                    भैया, मेरे चने में पीलापन आ रहा है, क्या करें?
                   </div>
                 </div>
-                <div className="bg-black/40 border border-white/10 text-xs px-3 py-2 rounded-lg text-slate-200 leading-relaxed shadow-sm">
-                  राम राम भाई! फसल में नाइट्रोजन की कमी दिख रही है, यूरिया की सही मात्रा डालने का समय आ गया है।
+                <div className="flex justify-start">
+                  <div className="glass-card text-[11px] px-3 py-2 rounded-2xl rounded-tl-none max-w-[90%] text-slate-200 leading-relaxed text-left border border-white/10">
+                    राम राम! यह नाइट्रोजन की कमी या पीला रतुआ हो सकता है। कृपया एक साफ फोटो खींचकर अपलोड करें।
+                  </div>
                 </div>
+              </div>
+              
+              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between px-2">
+                <div className="flex gap-1">
+                  <div className="w-1 h-3 bg-primary rounded-full animate-pulse" />
+                  <div className="w-1 h-4 bg-secondary rounded-full animate-pulse delay-75" />
+                  <div className="w-1 h-2 bg-primary rounded-full animate-pulse delay-150" />
+                </div>
+                <Scan className="h-4 w-4 text-slate-400" />
               </div>
             </div>
 
@@ -231,12 +252,24 @@ export const Landing: React.FC = () => {
           <p className="text-sm text-slate-400">किसान भाइयों के लिए विशेष रूप से बनाई गई स्मार्ट ए.आई. सेवाएँ</p>
         </div>
 
-        {/* 3D Smart Farm Banner */}
-        <div className="w-full h-64 md:h-80 mb-16 rounded-3xl overflow-hidden relative glass-card tilt-element shadow-2xl border border-white/10 group">
-          <img src={smartFarm3D} alt="3D Smart Farm" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-8">
-            <h4 className="text-2xl font-bold font-display text-white mb-2">आधुनिक डिजिटल खेती</h4>
-            <p className="text-sm text-slate-300 max-w-xl">कृत्रिम बुद्धिमत्ता (AI) और 3D तकनीक के साथ, अपनी खेती को बनाएं और भी ज्यादा स्मार्ट और सुरक्षित।</p>
+        {/* 3D Smart Farm Banner (CSS Only) */}
+        <div className="w-full h-64 md:h-80 mb-16 rounded-3xl overflow-hidden relative glass-card tilt-element shadow-2xl border border-white/10 group bg-gradient-to-r from-primary/80 to-emerald-900/80 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-10" />
+          
+          {/* Animated decorative glowing lines */}
+          <div className="absolute inset-0 z-0 opacity-30">
+            <div className="absolute top-1/4 left-0 w-full h-[1px] bg-white transform -rotate-12 animate-pulse" />
+            <div className="absolute top-3/4 left-0 w-full h-[1px] bg-white transform rotate-6 animate-pulse delay-500" />
+          </div>
+
+          <div className="relative z-20 flex flex-col items-center justify-center p-8 text-center">
+            <div className="h-16 w-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center mb-4 border border-white/20 shadow-lg">
+              <TrendingUp className="h-8 w-8 text-white" />
+            </div>
+            <h4 className="text-3xl md:text-4xl font-bold font-display text-white mb-3">आधुनिक डिजिटल खेती</h4>
+            <p className="text-sm md:text-base text-white/90 max-w-2xl font-medium">
+              कृत्रिम बुद्धिमत्ता (AI) और आधुनिक तकनीकों के साथ, अपनी खेती को बनाएं और भी ज्यादा स्मार्ट और सुरक्षित।
+            </p>
           </div>
         </div>
 
