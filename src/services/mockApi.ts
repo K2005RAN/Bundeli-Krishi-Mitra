@@ -260,6 +260,27 @@ export const mockApi = {
     }
   },
 
+  getWeatherByCoordinates: async (lat: number, lon: number): Promise<{ current: WeatherCondition; forecast: ForecastDay[] }> => {
+    try {
+      const res = await api.get<{ current: WeatherCondition; forecast: ForecastDay[] }>(`/weather/coordinates?lat=${lat}&lon=${lon}`);
+      return res.data;
+    } catch (err) {
+      console.error('Coordinates weather API failed, using fallback:', err);
+      return {
+        current: {
+          temp: 30,
+          humidity: 60,
+          rainProb: 10,
+          windSpeed: 10,
+          uvIndex: 5,
+          condition: 'Clear sky',
+          conditionBundeli: 'साफ मौसम'
+        },
+        forecast: []
+      };
+    }
+  },
+
   // --- MANDI PRICES SERVICES ---
   getMandiPrices: async (): Promise<MandiPrice[]> => {
     const res = await api.get<MandiPrice[]>('/mandi/prices');

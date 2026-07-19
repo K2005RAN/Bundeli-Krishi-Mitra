@@ -526,6 +526,64 @@ app.get('/api/weather/live/:district', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+app.get('/api/weather/coordinates', async (req, res) => {
+  try {
+    const { lat, lon } = req.query;
+    if (!lat || !lon) {
+      return res.status(400).json({ error: 'Latitude and Longitude are required' });
+    }
+
+    const axios = (await import('axios')).default;
+    
+    // Fetch Live Weather Data from Open-Meteo Satellite
+    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,precipitation,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`;
+    const weatherRes = await axios.get(weatherUrl);
+    const weatherData = weatherRes.data;
+    
+    // Translate Weather Codes into English and Bundeli
+    const getCondition = (code) => {
+      if (code === 0) return { eng: 'Clear sky', hi: 'धूप कड़क है' };
+      if (code >= 1 && code <= 3) return { eng: 'Partly cloudy', hi: 'बादल छाए हैं' };
+      if (code >= 45 && code <= 48) return { eng: 'Fog', hi: 'कोहरा है' };
+      if (code >= 51 && code <= 67) return { eng: 'Rain', hi: 'पानी बरस सकत है' };
+      if (code >= 71 && code <= 77) return { eng: 'Snow', hi: 'बर्फ़ गिर रही है' };
+      if (code >= 80 && code <= 82) return { eng: 'Showers', hi: 'तेज पानी गिर रओ' };
+      if (code >= 95 && code <= 99) return { eng: 'Thunderstorm', hi: 'बिजली कड़क रही है' };
+      return { eng: 'Clear', hi: 'साफ मौसम' };
+    };
+
+    const currentCond = getCondition(weatherData.current.weather_code);
+    
+    const current = {
+      temp: Math.round(weatherData.current.temperature_2m),
+      humidity: Math.round(weatherData.current.relative_humidity_2m),
+      rainProb: weatherData.daily.precipitation_probability_max[0] || 0,
+      windSpeed: Math.round(weatherData.current.wind_speed_10m),
+      uvIndex: 6,
+      condition: currentCond.eng,
+      conditionBundeli: currentCond.hi
+    };
+
+    const days = ['रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'];
+    
+    const forecast = weatherData.daily.time.map((timeStr, index) => {
+      const date = new Date(timeStr);
+      return {
+        day: days[date.getDay()],
+        tempMax: Math.round(weatherData.daily.temperature_2m_max[index]),
+        tempMin: Math.round(weatherData.daily.temperature_2m_min[index]),
+        condition: getCondition(weatherData.daily.weather_code[index]).eng,
+        rainProb: weatherData.daily.precipitation_probability_max[index] || 0
+      };
+    });
+
+    res.json({ current, forecast });
+  } catch (error) {
+    console.error('Weather Coordinates API Error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 app.get('/api/weather/alerts', async (req, res) => {
   try {
     const alerts = await WeatherAlert.find().sort({ createdAt: -1 });

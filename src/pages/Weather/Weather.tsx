@@ -13,7 +13,8 @@ import {
   Calendar,
   AlertTriangle,
   Info,
-  BadgeAlert
+  BadgeAlert,
+  MapPin
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -35,17 +36,20 @@ export const Weather: React.FC = () => {
   const [current, setCurrent] = useState<WeatherCondition | null>(null);
   const [forecast, setForecast] = useState<ForecastDay[]>([]);
   const [loading, setLoading] = useState(true);
+  const [locationName, setLocationName] = useState<string>(user?.district || 'झाँसी');
+  const [isLocating, setIsLocating] = useState(false);
 
   useEffect(() => {
     const fetchWeatherData = async () => {
       setLoading(true);
       try {
-        const district = user?.district || 'झाँसी';
-        
-        // Load weather
-        const data = await mockApi.getWeatherCondition(district);
-        setCurrent(data.current);
-        setForecast(data.forecast);
+        // Only fetch by district if the locationName matches the user's district
+        if (locationName === user?.district) {
+          const district = user?.district || 'झाँसी';
+          const data = await mockApi.getWeatherCondition(district);
+          setCurrent(data.current);
+          setForecast(data.forecast);
+        }
       } catch (e) {
         console.error(e);
       } finally {
@@ -54,7 +58,36 @@ export const Weather: React.FC = () => {
     };
 
     fetchWeatherData();
-  }, [user]);
+  }, [user, locationName]);
+
+  const handleLocateMe = () => {
+    if (!navigator.geolocation) {
+      alert('Your browser does not support geolocation.');
+      return;
+    }
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const data = await mockApi.getWeatherByCoordinates(latitude, longitude);
+          setCurrent(data.current);
+          setForecast(data.forecast);
+          setLocationName('मेरी लोकेशन (Current Location)');
+        } catch (error) {
+          console.error(error);
+          alert('Failed to fetch weather for your location.');
+        } finally {
+          setIsLocating(false);
+        }
+      },
+      (error) => {
+        console.error(error);
+        alert('Please allow location access to use this feature.');
+        setIsLocating(false);
+      }
+    );
+  };
 
   // Formulate warning advisories
   const getAdvisories = () => {
@@ -98,7 +131,7 @@ export const Weather: React.FC = () => {
       <div className="border-b border-slate-100 dark:border-slate-800 pb-4">
         <h2 className="text-2xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
           <CloudSun className="h-6 w-6 text-primary" />
-          मौसम पूर्वानुमान एवं कृषि अलर्ट ({user?.district})
+          मौसम पूर्वानुमान एवं कृषि अलर्ट ({locationName})
         </h2>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
           तापमान, वर्षा और स्थानीय कृषि वैज्ञानिक सलाह की ताज़ा रिपोर्ट।
@@ -114,8 +147,15 @@ export const Weather: React.FC = () => {
 
             <div className="space-y-6 relative">
               <div className="flex justify-between items-center">
-                <span className="text-sm font-semibold tracking-wider opacity-85 uppercase">{user?.district} आज</span>
-                <span className="text-xs bg-white/20 px-2 py-1 rounded-md font-bold">LIVE</span>
+                <span className="text-sm font-semibold tracking-wider opacity-85 uppercase">{locationName} आज</span>
+                <button 
+                  onClick={handleLocateMe}
+                  disabled={isLocating}
+                  className="flex items-center gap-1 text-xs bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-md font-bold transition-colors"
+                >
+                  <MapPin className="h-3 w-3" />
+                  {isLocating ? 'ढूंढ रहे हैं...' : 'मेरी लोकेशन (Locate Me)'}
+                </button>
               </div>
 
               <div className="flex items-center gap-4">
